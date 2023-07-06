@@ -29,12 +29,12 @@ public class CardListener implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		this.cardGUI.mark();
+		this.cardGUI.mark(true);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		this.cardGUI.unmark();
+		this.cardGUI.mark(false);
 	}
 
 }
