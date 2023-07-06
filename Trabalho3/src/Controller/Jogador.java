@@ -1,19 +1,32 @@
 package Controller;
 
-public class Jogador {
+import java.io.Serializable;
+
+import Model.Cliente;
+import Model.Conexao;
+
+public class Jogador implements Serializable{
 	private int id;
 	private String nome;
 	private int pontos;
 	private String[] cartas;
 	private String cartaEscolhida;
+	private String dica="";
+	private String dicaDaVez="";
 	private boolean jogadorDaVez;
-	public Jogador(int id, String nome) {
+	private Mensagem msg;
+	public Jogador(String nome) {
 		super();
-		this.id = id;
 		this.nome = nome;
 		this.pontos = 0;
 		this.jogadorDaVez = false;
+		msg = new Mensagem();
+		msg.jogador = this;
+		msg.operacao = 1;
+		new Conexao(msg);
+		//new Cliente(this);
 	}
+	
 	public String getNome() {
 		return nome;
 	}
@@ -46,6 +59,23 @@ public class Jogador {
 	}
 	public int getId() {
 		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getDica() {
+		return dica;
+	}
+	public void setDica(String dica) {
+		this.dica = dica;
+	}
+
+	public String getDicaDaVez() {
+		return dicaDaVez;
+	}
+
+	public void setDicaDaVez(String dicaDaVez) {
+		this.dicaDaVez = dicaDaVez;
 	}
 	
 	
