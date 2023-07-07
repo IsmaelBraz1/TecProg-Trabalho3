@@ -1,13 +1,12 @@
 package Controller;
 
 import java.util.ArrayList;
-
 import Model.Conexao;
 
 public class ControladorInterface {
 	public Jogador jogador;
 	public ArrayList<String> cartasRodada;
-	public String dicaDaVez;
+	public String dicaDaVez = "";
 	public ControladorInterface() {
 		cartasRodada = new ArrayList<String>();
 	}
@@ -33,7 +32,6 @@ public class ControladorInterface {
 		dicaDaVez = msg.dica;
 		jogador.setDicaDaVez(msg.dica);
 	}
-	
 	//metodo para ser usado quando o jogador escolher a carta
 	public void enviarCarta(String carta) {
 		jogador.setCartaEscolhida(carta);
@@ -42,7 +40,6 @@ public class ControladorInterface {
 		msg.operacao = 4;
 		new Conexao(msg);
 	}
-	
 	//metodo que da autorizacao (quando for true) para que o jogo mostre a tela para votacao
 	public Boolean todosEscolheram() {
 		Mensagem msg = new Mensagem();
@@ -53,7 +50,6 @@ public class ControladorInterface {
 		else
 			return false;
 	}
-	
 	//metodo para ser chamado na tela da votacao (retorna as cartas escolhidas pelos jogadores)
 	public void pegarCartasRodada() {
 		Mensagem msg = new Mensagem();
@@ -61,19 +57,14 @@ public class ControladorInterface {
 		new Conexao(msg);
 		cartasRodada = msg.cartasRodada;
 	}
-	
 	//metodo a ser chamado quando o jogador votar 
 	public void enviarVotoDaVez(String votoDaVez) {
 		jogador.setVotoDaVez(votoDaVez);
 		Mensagem msg = new Mensagem();
 		msg.operacao = 7;
-		msg.IDjogador = jogador.getId();
-		msg.votoDaVez = votoDaVez;
 		msg.jogador = this.jogador;
-	//	msg.jogador = jogador;
 		new Conexao(msg);
 	}
-	
 	//da autorizacao (true) para prosseguir o jogo depois que todos votarem
 	public Boolean todosVotaram() {
 		Mensagem msg = new Mensagem();
@@ -84,7 +75,6 @@ public class ControladorInterface {
 		else
 			return false;
 	}
-	
 	//inicia a proxima rodada
 	public void proximaRodada() {
 		Mensagem msg = new Mensagem();
@@ -92,8 +82,7 @@ public class ControladorInterface {
 		msg.jogador = this.jogador;
 		new Conexao(msg);
 	}
-	
-	//atribui a pontuacao dos jogadores apos cada rodada (deve ser usado somente depois do metodo proximaRodada() )
+	//atribui a pontuacao dos jogadores apos cada rodada (deve ser usado antes do metodo proximaRodada() )
 	public void setarPontuacao() {
 		Mensagem msg = new Mensagem();
 		msg.operacao = 10;

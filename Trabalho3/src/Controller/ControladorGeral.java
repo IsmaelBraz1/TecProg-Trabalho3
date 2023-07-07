@@ -32,7 +32,6 @@ public class ControladorGeral {
 	public void AdicionarJogador(Jogador jogador) {
 		jogadores.NovoJogador(jogador);
 		jogador.setCartas(sorteio.sorteio());
-		System.out.println("jogador adicionado no geral");
 		if (jogadores.getListaJogadores().get(1).getId() == 1)
 			jogadores.getListaJogadores().get(1).setJogadorDaVez(true);
 	}
@@ -44,7 +43,7 @@ public class ControladorGeral {
 		}
 		jogador.setCartas(sorteio.sorteio());
 		for (int i = 1; i < jogadores.getListaJogadores().size(); i++) {
-			if (jogador.getId() == (sequencia - 1)) {
+			if (jogador.isJogadorDaVez()) {
 				jogador.setPontos(jogadores.getListaJogadores().get(i).getPontos());
 				jogadores.getListaJogadores().get(i).setJogadorDaVez(false);
 				jogador.setJogadorDaVez(false);
@@ -61,6 +60,8 @@ public class ControladorGeral {
 			sequencia++;
 			ControledeAcesso = 0;
 		}
+		if(sequencia == jogadores.getListaJogadores().size()-1)
+			sequencia = 1;
 	}
 
 	public void CartaDicaDaVez(Mensagem msg) {
@@ -81,7 +82,6 @@ public class ControladorGeral {
 	}
 
 	public void VerificarTodosVotaram(Mensagem msg) {
-		System.out.println("entrou aqui");
 		if (qtdVotos == jogadores.getListaJogadores().size() - 2)
 			msg.todosVotaram = true;
 		else
@@ -120,5 +120,4 @@ public class ControladorGeral {
 	public String getDicaDaVez() {
 		return dicaDaVez;
 	}
-
 }

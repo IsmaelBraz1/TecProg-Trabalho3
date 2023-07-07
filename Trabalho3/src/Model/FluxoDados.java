@@ -24,7 +24,6 @@ public class FluxoDados extends Thread {
 			
 			// faz as alteracoes no objeto
 			if (objeto.operacao == 1) {
-				System.out.println("chegou aqui o "+objeto.jogador.getNome());
 				control.AdicionarJogador(objeto.jogador);
 				// devolve o objeto
 				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
@@ -43,7 +42,6 @@ public class FluxoDados extends Thread {
 			}
 			if(objeto.operacao == 5) {
 				control.VerificarEscolheram(objeto);
-				System.out.println("verificou");
 				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
 				saida.writeObject(objeto);
 			}
@@ -74,7 +72,7 @@ public class FluxoDados extends Thread {
 			}
 			conexao.close();
 		} catch (Exception e) {
+			System.out.println("erro no fluxo de dados "+e);
 		}
-
 	}
 }
