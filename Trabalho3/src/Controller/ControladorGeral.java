@@ -6,8 +6,9 @@ import java.util.Collections;
 public class ControladorGeral {
 	private ListaJogadores jogadores;
 	private SorteioCartas sorteio;
-	private ArrayList<Jogador> lista;
-	private int sequencia;
+	private static int sequencia = 2;
+	private static int ControledeAcesso = 0;
+	private int qtdVotos;
 	private String cartaDaVez;
 	private String dicaDaVez;
 	private ArrayList<String> cartasDaRodada;
@@ -18,7 +19,7 @@ public class ControladorGeral {
 		this.jogadores = ListaJogadores.getInstance();
 		this.sorteio = SorteioCartas.getInstance();
 		this.cartasDaRodada = new ArrayList<String>();
-		sequencia = 0;
+		qtdVotos = 0;
 	}
 
 	public static ControladorGeral getInstance() {
@@ -29,85 +30,87 @@ public class ControladorGeral {
 	}
 
 	public void AdicionarJogador(Jogador jogador) {
-
-		// jogador.setCartas(sorteio.sorteio()); //comentado enquanto nao tem mais
-		// cartas
 		jogadores.NovoJogador(jogador);
+		jogador.setCartas(sorteio.sorteio());
 		System.out.println("jogador adicionado no geral");
 		if (jogadores.getListaJogadores().get(1).getId() == 1)
 			jogadores.getListaJogadores().get(1).setJogadorDaVez(true);
+	}
+
+	public void proximaRodada(Jogador jogador) {
+		if (ControledeAcesso == 0) {
+			SorteioCartas.jaForamSorteados.clear();
+			cartasDaRodada.clear();
+		}
+		jogador.setCartas(sorteio.sorteio());
+		for (int i = 1; i < jogadores.getListaJogadores().size(); i++) {
+			if (jogador.getId() == (sequencia - 1)) {
+				jogador.setPontos(jogadores.getListaJogadores().get(i).getPontos());
+				jogadores.getListaJogadores().get(i).setJogadorDaVez(false);
+				jogador.setJogadorDaVez(false);
+			}
+		}
+		for (int i = 1; i < jogadores.getListaJogadores().size(); i++) {
+			if (jogadores.getListaJogadores().get(i).getId() == sequencia && jogador.getId() == sequencia) {
+				jogadores.getListaJogadores().get(i).setJogadorDaVez(true);
+				jogador.setJogadorDaVez(true);
+			}
+		}
+		ControledeAcesso++;
+		if (ControledeAcesso == jogadores.getListaJogadores().size() - 1) {
+			sequencia++;
+			ControledeAcesso = 0;
+		}
 	}
 
 	public void CartaDicaDaVez(Mensagem msg) {
 		this.cartaDaVez = msg.carta;
 		this.dicaDaVez = msg.dica;
 		cartasDaRodada.add(cartaDaVez);
-		System.out.println("a dica recebida foi: "+this.dicaDaVez);
 	}
-	
+
 	public void receberCartas(Mensagem msg) {
 		cartasDaRodada.add(msg.carta);
 	}
-	
+
 	public void VerificarEscolheram(Mensagem msg) {
-		System.out.println("entrou aqui");
-		int a=2;
-		if(1+cartasDaRodada.size()==jogadores.getListaJogadores().size()) {
+		if (1 + cartasDaRodada.size() == jogadores.getListaJogadores().size())
 			msg.todosEscolheram = true;
-			System.out.println("entrou aqui no true");
-		}else {
+		else
 			msg.todosEscolheram = false;
-			System.out.println("entrou aqui no false");
-		}
-	}
-	
-	
-	public void rodada() {
-		lista = jogadores.getListaJogadores();
-		Collections.shuffle(lista);
-		while (true) {
-			for (int i = 0; i < lista.size(); i++) {
-				lista.get(i).setJogadorDaVez(false);
-				lista.get(i).setCartas(sorteio.sorteio());
-			}
-			// sequencia da rodada
-			for (int i = 0; i < lista.size(); i++) {
-				// definicao do jogador da vez da rodada
-				Jogador jogadorDaVez = lista.get(i);
-				jogadorDaVez.setJogadorDaVez(true);
-
-			}
-		}
 	}
 
-	public void defineJogadorVez(Jogador jogador) {
+	public void VerificarTodosVotaram(Mensagem msg) {
+		System.out.println("entrou aqui");
+		if (qtdVotos == jogadores.getListaJogadores().size() - 2)
+			msg.todosVotaram = true;
+		else
+			msg.todosVotaram = false;
+	}
 
-		for (int i = 0; i < 5; i++) {
-			if (jogador.getId() == sequencia) {
-				jogador.setJogadorDaVez(true);
+	public ArrayList<String> getCartasDaRodada() {
+		Collections.shuffle(cartasDaRodada);
+		return cartasDaRodada;
+	}
+
+	public void ComputarVotosJogadores(Mensagem msg) {
+		qtdVotos++;
+		if (msg.jogador.getVotoDaVez().equals(this.cartaDaVez)) {
+			for (int j = 1; j < jogadores.getListaJogadores().size(); j++) {
+				if (jogadores.getListaJogadores().get(j).isJogadorDaVez()) {
+					jogadores.getListaJogadores().get(j)
+							.setPontos(jogadores.getListaJogadores().get(j).getPontos() + 1);
+				}
 			}
 		}
-		// sequencia++;
-		// Jogador jog = jogador;
-		// jogador.setDica("id: "+ jogador.getId()+" Alteracao: a dica é:
-		// "+jogador.getNome());
-		// return jog;
 	}
 
-	public void proximaRodada() {
-		sequencia++;
-	}
-
-	public void escolherCarta(Jogador jogador, String carta) {
-		jogador.setCartaEscolhida(carta);
-	}
-
-	public ArrayList<Jogador> getLista() {
-		return lista;
-	}
-
-	public ListaJogadores getJogadores() {
-		return jogadores;
+	public void getPontuacao(Mensagem msg) {
+		for (int j = 1; j < jogadores.getListaJogadores().size(); j++) {
+			if (jogadores.getListaJogadores().get(j).getId() == msg.jogador.getId()) {
+				msg.jogador.setPontos(jogadores.getListaJogadores().get(j).getPontos());
+			}
+		}
 	}
 
 	public String getCartaDaVez() {
@@ -117,6 +120,5 @@ public class ControladorGeral {
 	public String getDicaDaVez() {
 		return dicaDaVez;
 	}
-	
 
 }

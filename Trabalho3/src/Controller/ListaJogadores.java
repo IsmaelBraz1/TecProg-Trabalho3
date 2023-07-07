@@ -18,20 +18,12 @@ public class ListaJogadores {
         return instance;
     }
     public void NovoJogador(Jogador jogador) {
-    	System.out.println("entrou no add da lista "+identificador);
-    	//
-    	listaJogadores.add(jogador);
     	jogador.setId(identificador);
-    	System.out.println(listaJogadores.get(identificador).getNome()+" foi adicionado na lista id: "+listaJogadores.get(identificador).getId());
+    	listaJogadores.add(jogador);
     	identificador++;
     }
     
     public ArrayList<Jogador> getListaJogadores() {
 		return listaJogadores;
-	}
-	public ArrayList<Jogador> definirSequencia() {
-		ArrayList<Jogador> sequencia = listaJogadores;
-		Collections.shuffle(sequencia);
-		return sequencia;
 	}
 }

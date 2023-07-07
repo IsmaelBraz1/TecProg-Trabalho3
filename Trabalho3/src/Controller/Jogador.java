@@ -2,10 +2,11 @@ package Controller;
 
 import java.io.Serializable;
 
-import Model.Cliente;
 import Model.Conexao;
 
 public class Jogador implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String nome;
 	private int pontos;
@@ -14,6 +15,7 @@ public class Jogador implements Serializable{
 	private String dica="";
 	private String dicaDaVez="";
 	private boolean jogadorDaVez;
+	private String votoDaVez;
 	private Mensagem msg;
 	public Jogador(String nome) {
 		super();
@@ -24,7 +26,6 @@ public class Jogador implements Serializable{
 		msg.jogador = this;
 		msg.operacao = 1;
 		new Conexao(msg);
-		//new Cliente(this);
 	}
 	
 	public String getNome() {
@@ -76,6 +77,14 @@ public class Jogador implements Serializable{
 
 	public void setDicaDaVez(String dicaDaVez) {
 		this.dicaDaVez = dicaDaVez;
+	}
+
+	public String getVotoDaVez() {
+		return votoDaVez;
+	}
+
+	public void setVotoDaVez(String votoDaVez) {
+		this.votoDaVez = votoDaVez;
 	}
 	
 	

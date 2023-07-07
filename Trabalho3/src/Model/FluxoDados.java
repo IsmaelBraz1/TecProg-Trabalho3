@@ -7,24 +7,24 @@ import java.net.Socket;
 import Controller.ControladorGeral;
 import Controller.*;
 
-public class Trafego extends Thread {
+public class FluxoDados extends Thread {
 	Socket conexao;
 
-	public Trafego(Socket conect) {
+	public FluxoDados(Socket conect) {
 		this.conexao = conect;
 	}
 
 	public void run() {
 		try {
 			ControladorGeral control = ControladorGeral.getInstance();
-			System.out.println("Cliente conectado com thread (" + this.getId() + ")  :" + conexao.getInetAddress());
 			// fluxo de dados do cliente para comunicar e enviar o objeto
 			ObjectInputStream entrada = new ObjectInputStream(conexao.getInputStream());
-			// pega o objeto(jogador) vindo do cliente
+			// pega o objeto vindo do cliente
 			Mensagem objeto = (Mensagem) entrada.readObject();
 			
 			// faz as alteracoes no objeto
 			if (objeto.operacao == 1) {
+				System.out.println("chegou aqui o "+objeto.jogador.getNome());
 				control.AdicionarJogador(objeto.jogador);
 				// devolve o objeto
 				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
@@ -35,7 +35,6 @@ public class Trafego extends Thread {
 			}
 			if(objeto.operacao == 3) {
 				objeto.dica = control.getDicaDaVez();
-				System.out.println(objeto.dica);
 				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
 				saida.writeObject(objeto);
 			}
@@ -48,9 +47,32 @@ public class Trafego extends Thread {
 				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
 				saida.writeObject(objeto);
 			}
-			// Thread.sleep(10000);
+			if(objeto.operacao == 6) {
+				objeto.cartasRodada = control.getCartasDaRodada();
+				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
+				saida.writeObject(objeto);
+			}
+			if(objeto.operacao == 7) {
+				control.ComputarVotosJogadores(objeto);
+				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
+				saida.writeObject(objeto.jogador);
+			}
+			if(objeto.operacao == 8) {
+				control.VerificarTodosVotaram(objeto);
+				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
+				saida.writeObject(objeto);
+			} 
+			if(objeto.operacao == 9) {
+				control.proximaRodada(objeto.jogador);
+				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
+				saida.writeObject(objeto.jogador);
+			}
+			if(objeto.operacao == 10) {
+				control.getPontuacao(objeto);
+				ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
+				saida.writeObject(objeto);
+			}
 			conexao.close();
-			System.out.println("cliente finalizado(" + this.getId() + ")   " + conexao.getInetAddress());
 		} catch (Exception e) {
 		}
 
