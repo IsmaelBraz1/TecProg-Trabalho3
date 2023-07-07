@@ -1,40 +1,29 @@
 package listeners;
 
-import java.awt.event.*;
-
 import View.include.Card;
 
-public class CardListener implements MouseListener {
+public abstract class CardListener {
 	private String card; 
 	private Card cardGUI;
 	
-	public CardListener(String card, Card cardGUI) {
+	public CardListener(String card) {
 		this.card = card;
+		this.cardGUI = null;
+	}
+	
+	public String getCard() {
+		return card;
+	}
+
+	public void setCard(String card) {
+		this.card = card;
+	}
+
+	public Card getCardGUI() {
+		return cardGUI;
+	}
+
+	public void setCardGUI(Card cardGUI) {
 		this.cardGUI = cardGUI;
 	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println("Clicou");		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-	
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		this.cardGUI.mark(true);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		this.cardGUI.mark(false);
-	}
-
 }

@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import View.include.*;
 import View.style.*;
+import listeners.CardListeners;
 
 public class PlayerChoosed extends StylePanel{
 	private JButton send;
@@ -19,7 +20,7 @@ public class PlayerChoosed extends StylePanel{
 		c.gridwidth = 2;
 		c.gridy = 1;
 		c.insets = new Insets(50, 0, 0, 0);
-		this.add(new CardsPanel(),c);
+		this.add(new CardsPanel(CardListeners.CARDCHOOSED),c);
 		
 		this.fieldTip = new JTextField(80);
 		this.fieldTip.setPreferredSize(new Dimension(50,24));

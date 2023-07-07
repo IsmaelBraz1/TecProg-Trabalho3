@@ -1,6 +1,7 @@
 package View.include;
 
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.awt.image.*;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import View.style.StylePanel;
+import listeners.CardChoosed;
 import listeners.CardListener;
 
 public class Card extends JLabel {
@@ -20,7 +22,7 @@ public class Card extends JLabel {
 	private boolean lock;
 	private boolean enabled;
 	
-	public Card(String imageFilePath) {
+	public Card(String imageFilePath, CardListener cardListener) {
 		ImageIcon imageCard = new ImageIcon(imageFilePath);
 		try {
 			this.image = ImageIO.read(new File(imageFilePath));
@@ -28,11 +30,12 @@ public class Card extends JLabel {
 			System.out.println("Problema ao ler a imagem da carta");
 			return;
 		}
-		this.listener = new CardListener(imageFilePath,this);
+		this.listener = cardListener;
+		this.listener.setCardGUI(this);
 		this.cardSize = new Dimension(150, 240);
 		this.setIcon(new ImageIcon(image.getScaledInstance((int)this.cardSize.getWidth(), (int)this.cardSize.getHeight(), java.awt.Image.SCALE_SMOOTH )));
-		this.lock(true);	
-		this.emphasis(false);
+		this.lock(false);	
+		this.emphasis(true);
 		this.repaint();
 		
 	}
@@ -45,7 +48,7 @@ public class Card extends JLabel {
 	public void SetEnabled (boolean state) {
 		if(state) {
 			this.enabled = true;
-			this.addMouseListener(this.listener);
+			this.addMouseListener((MouseListener)this.listener);
 			this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		}else {
 			this.enabled = false;

@@ -4,6 +4,7 @@ import java.awt.*;
 
 import View.include.*;
 import View.style.*;
+import listeners.CardListeners;
 
 public class PlayerVotation extends StylePanel {
 	private CardsPanel panel;
@@ -22,7 +23,7 @@ public class PlayerVotation extends StylePanel {
 		c.anchor = c.CENTER;
 		c.gridy = 1;
 		c.gridwidth = 2;
-		this.panel = new CardsPanel();
+		this.panel = new CardsPanel(CardListeners.CARDVOTATION);
 		this.add(this.panel,c);
 	}
 	

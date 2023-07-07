@@ -7,6 +7,7 @@ import javax.swing.*;
 import View.include.*;
 import View.include.Error;
 import View.style.*;
+import listeners.CardListeners;
 
 public class PlayerGuess extends StylePanel {
 	private JButton update;
@@ -23,7 +24,7 @@ public class PlayerGuess extends StylePanel {
 		c.gridwidth = 2;
 		c.gridy = 1;
 		c.insets = new Insets(50, 0, 0, 0);
-		this.panel = new CardsPanel();
+		this.panel = new CardsPanel(CardListeners.CARDGUESS);
 		this.add(this.panel,c);
 		
 		c.gridy = 2;
