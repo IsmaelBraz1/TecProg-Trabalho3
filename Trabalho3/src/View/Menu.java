@@ -11,6 +11,8 @@ import View.include.Waiting;
 import View.style.StylePanel;
 
 public class Menu extends StylePanel {
+	CardLayout cards;
+	JPanel panelCard;
 	
 	public Menu() {
 		this.setLayout(new GridBagLayout());
@@ -20,9 +22,9 @@ public class Menu extends StylePanel {
 		this.add(new Header(),c);
 		c.gridy = 1;
 		
-		JPanel panelCard = new JPanel();
-		CardLayout cards;
-		panelCard.setLayout(cards = new CardLayout());
+		this.panelCard = new JPanel();
+		
+		panelCard.setLayout(this.cards = new CardLayout());
 		
 		panelCard.add(new Name(),"NAME");
 		panelCard.add(new MultiplayerSetup(),"SETUP");
@@ -30,7 +32,19 @@ public class Menu extends StylePanel {
 		
 		this.add(panelCard,c);
 		
-		cards.show(panelCard,"WAITING");
+		cards.show(panelCard,"NAME");
 		this.setPreferredSize(new Dimension(300,260));
+	}
+	
+	public void getNameScreen() {
+		cards.show(this.panelCard,"NAME");
+	}
+	
+	public void getSetupScreen() {
+		cards.show(this.panelCard,"SETUP");
+	}
+	
+	public void getWaitingScreen() {
+		cards.show(this.panelCard,"WAITING");
 	}
 }

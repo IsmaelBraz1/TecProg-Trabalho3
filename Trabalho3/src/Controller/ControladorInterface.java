@@ -2,17 +2,32 @@ package Controller;
 
 import java.util.ArrayList;
 import Model.Conexao;
+import View.FacadeGUI;
+import View.TelaPrincipal;
 
 public class ControladorInterface {
+	private static ControladorInterface instance;
 	public Jogador jogador;
 	public ArrayList<String> cartasRodada;
 	public String dicaDaVez = "";
+	private FacadeGUI facade;
+	
 	public ControladorInterface() {
 		cartasRodada = new ArrayList<String>();
+		this.facade = new FacadeGUI(TelaPrincipal.getInstance());
+	}
+	
+	public static ControladorInterface getInstance() {
+		if(instance == null) {
+			instance = new ControladorInterface();
+			return instance;
+		}
+		return instance;
 	}
 	//metodo usado quando o cliente fizer login
 	public void novoJogador(String nome) {
 		jogador = new Jogador(nome);
+		this.facade.connectAndHostScreen();
 	}
 	//metodo usado quando o jogador da vez escolher a carta e a dica
 	public void EnviarCartaDica(String carta, String dica) {
