@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import View.include.*;
+import View.include.Error;
 import View.style.*;
 
 public class PlayerGuess extends StylePanel {
@@ -15,13 +16,11 @@ public class PlayerGuess extends StylePanel {
 	private StyleLabel tip;
 	
 	public PlayerGuess() {
-		this.setPreferredSize(new Dimension(1060,650));
+		this.setPreferredSize(new Dimension(1060,550));
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
 		c.gridwidth = 2;
-		this.header = new HeaderGame();
-		this.add(this.header,c);
 		c.gridy = 1;
 		c.insets = new Insets(50, 0, 0, 0);
 		this.panel = new CardsPanel();
@@ -36,7 +35,7 @@ public class PlayerGuess extends StylePanel {
 		
 		
 		this.send = new JButton("Escolher");
-		
+		this.send.setEnabled(false);
 		c.insets = new Insets(0, 10, 25, 10);
 		c.anchor = c.LAST_LINE_END;
 		c.gridwidth = 1;
