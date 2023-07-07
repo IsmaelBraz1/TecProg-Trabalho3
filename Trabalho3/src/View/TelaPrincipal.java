@@ -1,29 +1,57 @@
 package View;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+
+import View.include.Header;
+import View.include.HeaderGame;
+import View.include.Name;
 
 public class TelaPrincipal extends JFrame{
-	public TelaPrincipal() {
-		this.setSize(1000, 700);
-		this.setLocationRelativeTo(null);
+	private static TelaPrincipal instance;
+	private JPanel body;
+	private Menu menu;
+	private Game game;
+	
+	private TelaPrincipal() {
+		super("Jogo de cartas");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new BorderLayout());
-		JPanel painelInferior = new JPanel();
-		painelInferior.setLayout(new GridLayout(1,2));
-		JTextField inputDica = new JTextField();
-		painelInferior.add(inputDica);
-		painelInferior.add(new JButton("enviar"));
-		this.add(new PainelCartas(), BorderLayout.CENTER);
-		this.add(painelInferior, BorderLayout.SOUTH);
+				
+		this.menu = new Menu();
+		this.game = new Game();
+		
+		this.body = this.menu;
+		this.add(this.body);
+		
+		this.pack();
+		this.setResizable(false);
 		this.setVisible(true);
 	}
 	
+	public static TelaPrincipal getInstance() {
+		if(instance == null) {
+			instance = new TelaPrincipal();
+			return instance;
+		}
+		return instance;
+	}
+	
+	public void setMenu() {
+		this.remove(this.body);
+		this.body = this.menu;
+		this.add(this.body);
+		this.revalidate();
+		this.repaint();
+		this.pack();
+	}
+	
+	public void setGame() {
+		this.remove(this.body);
+		this.body = this.game;
+		this.add(this.body);
+		this.revalidate();
+		this.repaint();
+		this.pack();
+	}
 }
