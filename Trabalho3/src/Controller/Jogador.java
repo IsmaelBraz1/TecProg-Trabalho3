@@ -22,10 +22,6 @@ public class Jogador implements Serializable{
 		this.nome = nome;
 		this.pontos = 0;
 		this.jogadorDaVez = false;
-		msg = new Mensagem();
-		msg.jogador = this;
-		msg.operacao = 1;
-		new Conexao(msg);
 	}
 	
 	public String getNome() {
