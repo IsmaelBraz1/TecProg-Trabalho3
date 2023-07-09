@@ -3,6 +3,8 @@ package Controller;
 import java.util.ArrayList;
 import View.FacadeGUI;
 import View.TelaPrincipal;
+import View.include.Error;
+import View.include.IPInput;
 import Model.*;
 
 public class ControladorInterface {
@@ -35,25 +37,35 @@ public class ControladorInterface {
 
 	//se o jogador escolher a opcao host
 	public void iniciarHost() {
-		Servidor servidor = new Servidor(500);
+		Servidor servidor = new Servidor(5000);
 		servidor.start();
 		Mensagem msg = new Mensagem();
 		msg.jogador = jogador;
 		msg.operacao = 1;
 		new Conexao(msg, "127.0.0.1");
+		this.facade.GameScreen(jogador);
 	}
 
 	//se o clinete escolher a opcao "junte se a um amigo"
-	public void iniciarCliente(String ip) {
-		this.ip = ip;
+	public void iniciarCliente() {
+		this.ip = new IPInput().getIP();
 		Mensagem msg = new Mensagem();
 		msg.jogador = jogador;
 		msg.operacao = 1;
 		new Conexao(msg, this.ip);
+		this.facade.GameScreen(jogador);
 	}
 
 	// metodo usado quando o jogador da vez escolher a carta e a dica
 	public void EnviarCartaDica(String carta, String dica) {
+		if(carta == null) {
+			new Error("Você deve escolher uma carta!");
+			return;
+		}
+		if(dica == null || dica.isEmpty()) {
+			new Error("Você deve dar uma dica!");
+			return;
+		}
 		jogador.setCartaEscolhida(carta);
 		jogador.setDica(dica);
 		Mensagem msg = new Mensagem();
@@ -61,6 +73,8 @@ public class ControladorInterface {
 		msg.dica = dica;
 		msg.operacao = 2;
 		new Conexao(msg, ip);
+		this.facade.waitOthersSelect();
+		this.facade.setMessage("Espere os outros jogadores escolherem.");
 	}
 
 	// metodo que deve ser chamado pelos demais jogadores para receber a dica
@@ -68,8 +82,12 @@ public class ControladorInterface {
 		Mensagem msg = new Mensagem();
 		msg.operacao = 3;
 		new Conexao(msg, ip);
+		if(msg.dica == null) {
+			return;
+		}
 		dicaDaVez = msg.dica;
 		jogador.setDicaDaVez(msg.dica);
+		this.facade.SelectionByOtherPlayers(true, msg.dica);
 	}
 
 	// metodo para ser usado quando o jogador escolher a carta
@@ -79,6 +97,11 @@ public class ControladorInterface {
 		msg.carta = carta;
 		msg.operacao = 4;
 		new Conexao(msg, ip);
+		if(todosEscolheram()) {
+			this.facade.VotationScreen();
+			this.pegarCartasRodada();
+			this.facade.setCardsToVotation(this.cartasRodada);
+		}
 	}
 
 	// metodo que da autorizacao (quando for true) para que o jogo mostre a tela
@@ -109,6 +132,11 @@ public class ControladorInterface {
 		msg.operacao = 7;
 		msg.jogador = this.jogador;
 		new Conexao(msg, ip);
+		if(this.todosVotaram()) {
+			this.facade.RevealCard(msg.carta);
+			this.setarPontuacao();
+			this.facade.RestartGame();
+		}
 	}
 
 	// da autorizacao (true) para prosseguir o jogo depois que todos votarem
