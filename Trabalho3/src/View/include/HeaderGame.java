@@ -29,7 +29,7 @@ public class HeaderGame extends StylePanel {
 		
 		c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 1;
-		this.message = new StyleLabel("Lorem ipsum...",this.fontSize);
+		this.message = new StyleLabel("",this.fontSize);
 		this.add(this.message,c);
 		
 		c.anchor = GridBagConstraints.LINE_END;
@@ -41,6 +41,7 @@ public class HeaderGame extends StylePanel {
 	public void setMessage(String message) {
 		this.message.setText(message);
 	}
+	
 	
 	public void setjogador(Jogador player) {
 		if(player.isJogadorDaVez()) {
