@@ -3,18 +3,20 @@ package listeners;
 import java.awt.event.*;
 
 import View.include.Card;
+import View.include.CardsPanel;
 
 public class CardChoosed extends CardListener implements MouseListener {
 	private String card; 
-	private Card cardGUI;
+	private CardsPanel panel;
 	
-	public CardChoosed(String card) {
+	public CardChoosed(String card,CardsPanel panel) {
 		super(card);
+		this.panel = panel;
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("Clicou"+this.getClass().getName());		
+		panel.markCard(this.getCardGUI());
 	}
 
 	@Override
@@ -28,12 +30,12 @@ public class CardChoosed extends CardListener implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		this.getCardGUI().mark(true);
+		this.getCardGUI().entered(true);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		this.getCardGUI().mark(false);
+		this.getCardGUI().entered(false);
 	}
 
 }
