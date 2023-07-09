@@ -12,7 +12,7 @@ public class Conexao {
 	public Conexao(Mensagem msg,String ip){
 		try {
 			//Declarara socket cliente
-			Socket conexao = new Socket(ip,500);
+			Socket conexao = new Socket(ip,5000);
 			Mensagem mensagem = msg;
 			//fluxo de dados para envio
 			ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
