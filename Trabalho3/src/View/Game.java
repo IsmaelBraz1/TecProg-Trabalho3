@@ -11,6 +11,9 @@ public class Game extends StylePanel{
 	private HeaderGame header;
 	private JPanel body;
 	private CardLayout cardLayout;
+	protected PlayerChoosed playerChoosed;
+	protected PlayerGuess playerGuess;
+	protected PlayerVotation playerVotation;
 	
 	public Game() {
 		this.setPreferredSize(new Dimension(1060,650));
@@ -25,10 +28,14 @@ public class Game extends StylePanel{
 		c.gridy = 1;
 		c.anchor = c.CENTER;
 		this.body = new JPanel();
+		this.playerChoosed = new PlayerChoosed();
+		this.playerGuess = new PlayerGuess();
+		this.playerVotation = new PlayerVotation();
+		
 		this.body.setLayout(cardLayout = new CardLayout());
-		this.body.add(new PlayerChoosed(),"CHOOSED");
-		this.body.add(new PlayerGuess(),"GUESS");
-		this.body.add(new PlayerVotation(),"VOTATION");
+		this.body.add(this.playerChoosed,"CHOOSED");
+		this.body.add(this.playerGuess,"GUESS");
+		this.body.add(this.playerVotation,"VOTATION");
 		
 	
 		this.add(this.body,c);
@@ -38,4 +45,17 @@ public class Game extends StylePanel{
 	public HeaderGame getHeader() {
 		return this.header;
 	}
+	
+	public void setPlayerChoosedScreen() {
+		cardLayout.show(this.body, "CHOOSED");
+	}
+	
+	public void setPlayerGuessScreen() {
+		cardLayout.show(this.body, "GUESS");
+	}
+	
+	public void setPlayerVotationScreen() {
+		cardLayout.show(this.body, "VOTATION");
+	}
+	
 }
