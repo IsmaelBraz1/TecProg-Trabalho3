@@ -11,6 +11,7 @@ import listeners.CardListeners;
 public class PlayerChoosed extends StylePanel{
 	private JButton send;
 	private JTextField fieldTip;
+	private CardsPanel panel;
 	
 	public PlayerChoosed() {
 		this.setPreferredSize(new Dimension(1060,550));
@@ -20,11 +21,13 @@ public class PlayerChoosed extends StylePanel{
 		c.gridwidth = 2;
 		c.gridy = 1;
 		c.insets = new Insets(50, 0, 0, 0);
-		this.add(new CardsPanel(CardListeners.CARDCHOOSED),c);
+		this.panel = new CardsPanel(CardListeners.CARDCHOOSED);
+		this.add(this.panel,c);
 		
 		this.fieldTip = new JTextField(80);
 		this.fieldTip.setPreferredSize(new Dimension(50,24));
 		this.send = new JButton("Enviar");
+		this.send.addActionListener(new listeners.PlayerChoosed(this));
 		c.gridy = 2;
 		c.anchor = c.LINE_START;
 		c.insets = new Insets(0, 15, 15, 0);
@@ -39,6 +42,18 @@ public class PlayerChoosed extends StylePanel{
 		
 		c.gridx = 1;
 		this.add(this.send,c);
+	}
+
+	public JTextField getFieldTip() {
+		return fieldTip;
+	}
+
+	public CardsPanel getPanel() {
+		return panel;
+	}
+	
+	public void waitOtherPlayers(boolean state) {
+		this.panel.lockAllCards(state);
 	}
 }
 
