@@ -27,4 +27,7 @@ public class PlayerVotation extends StylePanel {
 		this.add(this.panel,c);
 	}
 	
+	public CardsPanel getPanel() {
+		return this.panel;
+	}
 }

@@ -54,4 +54,14 @@ public class TelaPrincipal extends JFrame{
 		this.repaint();
 		this.pack();
 	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+	
+	
 }
