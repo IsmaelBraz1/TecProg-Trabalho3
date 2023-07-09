@@ -25,7 +25,7 @@ public class SorteioCartas {
 		Random random = new Random();
 		int cartaSorteada;
 		for(int i = 0; i < 6;) {
-			cartaSorteada = random.nextInt(25);
+			cartaSorteada = random.nextInt(18);
 			if(!jaForamSorteados.contains(cartaSorteada)) {
 				cartas[i] = ler.getLista().get(cartaSorteada);
 				jaForamSorteados.add(cartaSorteada);
