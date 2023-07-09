@@ -8,6 +8,8 @@ import View.include.*;
 import View.include.Error;
 import View.style.*;
 import listeners.CardListeners;
+import listeners.PlayerGuessSend;
+import listeners.UpdatePlayerGuess;
 
 public class PlayerGuess extends StylePanel {
 	private JButton update;
@@ -31,11 +33,12 @@ public class PlayerGuess extends StylePanel {
 		c.gridwidth = 1;
 		c.insets = new Insets(20, 0, 0, 0);
 		c.anchor = c.PAGE_START;
-		this.tip =  new StyleLabel("A dica é : Lorem Ipsun dolor sit...");
+		this.tip =  new StyleLabel("");
 		this.add(this.tip,c);
 		
 		
 		this.send = new JButton("Escolher");
+		this.send.addActionListener(new PlayerGuessSend(this));
 		this.send.setEnabled(false);
 		c.insets = new Insets(0, 10, 25, 10);
 		c.anchor = c.LAST_LINE_END;
@@ -50,7 +53,20 @@ public class PlayerGuess extends StylePanel {
 		c.gridx =0;
 		c.anchor = c.LAST_LINE_START;
 		this.update = new JButton("Atualizar");
+		this.update.addActionListener(new UpdatePlayerGuess());
 		this.add(this.update,c);
 	}
+
+	public CardsPanel getPanel() {
+		return panel;
+	}
 	
+	public StyleLabel getTipLabel() {
+		return this.tip;
+	}
+	
+	public void waitForChoosedPlayer(boolean state) {
+		this.panel.lockAllCards(state);
+		this.send.setEnabled(!state);
+	}
 }
