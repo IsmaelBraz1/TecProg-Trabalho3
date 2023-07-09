@@ -14,16 +14,15 @@ import listeners.CardChoosed;
 import listeners.CardListener;
 
 public class Card extends JLabel {
-	private ImageIcon cardImage;
 	private Image image;
 	private CardListener listener;
 	private Dimension cardSize;
 	private boolean mark;
 	private boolean lock;
+	public boolean shadow;
 	private boolean enabled;
 	
 	public Card(String imageFilePath, CardListener cardListener) {
-		ImageIcon imageCard = new ImageIcon(imageFilePath);
 		try {
 			this.image = ImageIO.read(new File(imageFilePath));
 		} catch (Exception e) {
@@ -35,13 +34,28 @@ public class Card extends JLabel {
 		this.cardSize = new Dimension(150, 240);
 		this.setIcon(new ImageIcon(image.getScaledInstance((int)this.cardSize.getWidth(), (int)this.cardSize.getHeight(), java.awt.Image.SCALE_SMOOTH )));
 		this.lock(false);	
+		this.shadow = false;
 		this.emphasis(true);
+		this.repaint();	
+	}
+	
+	private void setShadow(boolean state) {
+		this.shadow = state;
 		this.repaint();
-		
+	}
+
+	public void entered(boolean state) {
+		if(state) {
+			this.setShadow(state);
+		}else {
+			if(!this.mark) 
+				this.setShadow(state);
+		}		
 	}
 	
 	public void mark(boolean state) {
 		this.mark = state;
+		this.setShadow(state);
 		this.repaint();
 	}
 	
@@ -84,7 +98,7 @@ public class Card extends JLabel {
 		if(lock) {
 			g2.drawImage(this.lockImageOverlay(), 0, 0, null);
 		}else {
-			if(mark) {
+			if(shadow) {
 				 g2.setColor(colorOverlaySelect);
 			     g2.fillRect(0, 0, getWidth(), getHeight());
 			}
@@ -114,6 +128,10 @@ public class Card extends JLabel {
 			return null;
 		}
 		
-		
 	}
+
+	public CardListener getListener() {
+		return listener;
+	}
+	
 }
