@@ -2,6 +2,7 @@ package Controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import Model.*;
 
 public class ControladorGeral {
 	private ListaJogadores jogadores;
@@ -37,6 +38,8 @@ public class ControladorGeral {
 	}
 
 	public void proximaRodada(Jogador jogador) {
+		DAO dao = new DAO();
+		dao.inserir(ControladorGeral.getInstance());
 		if (ControledeAcesso == 0) {
 			SorteioCartas.jaForamSorteados.clear();
 			cartasDaRodada.clear();
@@ -119,5 +122,21 @@ public class ControladorGeral {
 
 	public String getDicaDaVez() {
 		return dicaDaVez;
+	}
+	public String getJogadorDaVez() {
+		String nome = null;
+		for(int i = 1; i < jogadores.getListaJogadores().size(); i++) {
+			if(jogadores.getListaJogadores().get(i).isJogadorDaVez())
+				nome = jogadores.getListaJogadores().get(i).getNome();
+		}
+		return nome;
+	}
+	
+	public int[] getPontuacoes() {
+		int pontuacoes[] = null;
+		for(int i = 1; i < jogadores.getListaJogadores().size(); i++) {
+			pontuacoes[i-1] = jogadores.getListaJogadores().get(i).getPontos();
+		}
+		return pontuacoes;
 	}
 }
