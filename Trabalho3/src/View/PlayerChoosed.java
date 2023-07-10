@@ -54,6 +54,7 @@ public class PlayerChoosed extends StylePanel{
 	
 	public void waitOtherPlayers(boolean state) {
 		this.panel.lockAllCards(state);
+		this.send.setEnabled(!state);
 	}
 }
 

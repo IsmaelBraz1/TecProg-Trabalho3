@@ -20,6 +20,7 @@ public class CardsPanel extends StylePanel {
 		private MouseListener listener;
 		
 	public CardsPanel(CardListeners listener) {
+		//String[] cards = new String[] {"img/aluno.png","img/bug.png","img/C3po.png","img/r2d2.png","img/bb8.png","img/C3po.png"};
 		this.listenerEnum = listener;
 		this.markCard = null;
 		cards = null;
@@ -31,7 +32,14 @@ public class CardsPanel extends StylePanel {
 		if(filepathCards == null) 
 			return;
 		
+		
+		for (Card card : this.cards) {
+			this.remove(card);
+		}
+		
 		this.cards = new ArrayList<Card>();
+		this.repaint();
+		this.revalidate();
 		for (String filepath : filepathCards) {
 			CardListener cardListener = cardListener(this.listenerEnum, filepath);
 			Card card = new Card(filepath,cardListener);
@@ -47,7 +55,7 @@ public class CardsPanel extends StylePanel {
 		if(cardListener == cardListener.CARDGUESS)
 			return new CardGuess(filepath,this);
 		if(cardListener == cardListener.CARDVOTATION)
-			return new CardVotation(filepath);
+			return new CardVotation(filepath,this);
 		return null;
 	}
 	
