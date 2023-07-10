@@ -1,6 +1,11 @@
 package Controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.Timer;
+
 import View.FacadeGUI;
 import View.TelaPrincipal;
 import View.include.Error;
@@ -132,10 +137,13 @@ public class ControladorInterface {
 		msg.operacao = 7;
 		msg.jogador = this.jogador;
 		new Conexao(msg, ip);
-		if(this.todosVotaram()) {
-			this.facade.RevealCard(msg.carta);
-			this.setarPontuacao();
-			this.facade.RestartGame();
+		try {
+			if(this.todosVotaram()) {
+				this.setarPontuacao();
+				this.facade.RestartGame();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 
@@ -166,5 +174,6 @@ public class ControladorInterface {
 		msg.jogador = this.jogador;
 		new Conexao(msg, ip);
 		jogador.setPontos(msg.pontuacao);
+		this.facade.setPlayer(this.jogador);
 	}
 }

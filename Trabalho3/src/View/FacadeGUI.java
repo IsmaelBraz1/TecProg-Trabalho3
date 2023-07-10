@@ -1,10 +1,13 @@
 package View;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import Controller.*;
 import View.include.Card;
@@ -34,6 +37,7 @@ public class FacadeGUI {
 	public void GameScreen(Jogador player) {
 		this.screen.setGame();
 		if(player.isJogadorDaVez()) {
+			this.screen.getGame().playerChoosed.waitOtherPlayers(false);
 			this.screen
 			.getGame()
 			.setPlayerChoosedScreen();
@@ -59,6 +63,18 @@ public class FacadeGUI {
 	
 	public void waitOthersSelect() {
 		this.screen.getGame().playerChoosed.waitOtherPlayers(true);
+		Timer timer = new Timer(1000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(ControladorInterface.getInstance().todosVotaram()) {
+					((Timer)e.getSource()).stop();
+					RestartGame();
+				}
+				
+			}
+		});
+		timer.start();
 	}
 	
 	public void setCards(String [] cardsFilepath) {
@@ -86,24 +102,25 @@ public class FacadeGUI {
 	}
 	
 	public void RevealCard(String cardFilepath) {
-		ArrayList<Card> cards = this.screen.getGame().playerChoosed.getPanel().getCards();
 		
-		for (Card card : cards) {
-			if(card.getListener().getCard() != cardFilepath) {
-				card.emphasis(false);
-			}
+		for (Card card : this.screen.getGame().playerChoosed.getPanel().getCards()) {
+			card.emphasis(card.getListener().getCard().equals(cardFilepath) );
 			card.SetEnabled(false);
 		}
 	}
 	
 	public void RestartGame() {
 		this.setMessage("Nova partida iniciando em 10 segundos");
-		try {
-			Thread.sleep(10000);
-			ControladorInterface.getInstance().proximaRodada();
-			this.GameScreen(ControladorInterface.getInstance().jogador);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		Timer timer = new Timer(10000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ControladorInterface.getInstance().proximaRodada();
+				GameScreen(ControladorInterface.getInstance().jogador);		
+				setMessage("");
+				((Timer)e.getSource()).stop();
+			}
+		});
+		timer.start();
 	}
 }
