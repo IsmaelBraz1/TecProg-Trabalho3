@@ -10,6 +10,7 @@ public class ControladorGeral {
 	private static int sequencia = 2;
 	private static int ControledeAcesso = 0;
 	private int qtdVotos;
+	private boolean ihHost;
 	private String cartaDaVez;
 	private String dicaDaVez;
 	private ArrayList<String> cartasDaRodada;
@@ -38,12 +39,11 @@ public class ControladorGeral {
 	}
 
 	public void proximaRodada(Jogador jogador) {
-		DAO dao = new DAO();
-		dao.inserir(ControladorGeral.getInstance());
-		if (ControledeAcesso == 0) {
-			SorteioCartas.jaForamSorteados.clear();
-			cartasDaRodada.clear();
-		}
+		//DAO dao = new DAO();
+		//dao.inserir(ControladorGeral.getInstance());
+		qtdVotos = 0;
+		SorteioCartas.jaForamSorteados.clear();
+		cartasDaRodada.clear();
 		jogador.setCartas(sorteio.sorteio());
 		for (int i = 1; i < jogadores.getListaJogadores().size(); i++) {
 			if (jogador.isJogadorDaVez()) {
@@ -63,7 +63,7 @@ public class ControladorGeral {
 			sequencia++;
 			ControledeAcesso = 0;
 		}
-		if(sequencia == jogadores.getListaJogadores().size()-1)
+		if(sequencia == jogadores.getListaJogadores().size())
 			sequencia = 1;
 	}
 

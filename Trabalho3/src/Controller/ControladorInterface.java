@@ -34,13 +34,11 @@ public class ControladorInterface {
 		return instance;
 	}
 
-	// metodo usado quando o cliente fizer login
 	public void novoJogador(String nome) {
 		jogador = new Jogador(nome);
 		this.facade.connectAndHostScreen();
 	}
 
-	//se o jogador escolher a opcao host
 	public void iniciarHost() {
 		Servidor servidor = new Servidor(5000);
 		servidor.start();
@@ -51,7 +49,6 @@ public class ControladorInterface {
 		this.facade.GameScreen(jogador);
 	}
 
-	//se o clinete escolher a opcao "junte se a um amigo"
 	public void iniciarCliente() {
 		this.ip = new IPInput().getIP();
 		Mensagem msg = new Mensagem();
@@ -61,7 +58,6 @@ public class ControladorInterface {
 		this.facade.GameScreen(jogador);
 	}
 
-	// metodo usado quando o jogador da vez escolher a carta e a dica
 	public void EnviarCartaDica(String carta, String dica) {
 		if(carta == null) {
 			new Error("Você deve escolher uma carta!");
@@ -82,7 +78,6 @@ public class ControladorInterface {
 		this.facade.setMessage("Espere os outros jogadores escolherem.");
 	}
 
-	// metodo que deve ser chamado pelos demais jogadores para receber a dica
 	public void receberDica() {
 		Mensagem msg = new Mensagem();
 		msg.operacao = 3;
@@ -95,7 +90,6 @@ public class ControladorInterface {
 		this.facade.SelectionByOtherPlayers(true, msg.dica);
 	}
 
-	// metodo para ser usado quando o jogador escolher a carta
 	public void enviarCarta(String carta) {
 		jogador.setCartaEscolhida(carta);
 		Mensagem msg = new Mensagem();
@@ -108,9 +102,7 @@ public class ControladorInterface {
 			this.facade.setCardsToVotation(this.cartasRodada);
 		}
 	}
-
-	// metodo que da autorizacao (quando for true) para que o jogo mostre a tela
-	// para votacao
+	
 	public Boolean todosEscolheram() {
 		Mensagem msg = new Mensagem();
 		msg.operacao = 5;
@@ -121,8 +113,6 @@ public class ControladorInterface {
 			return false;
 	}
 
-	// metodo para ser chamado na tela da votacao (retorna as cartas escolhidas
-	// pelos jogadores)
 	public void pegarCartasRodada() {
 		Mensagem msg = new Mensagem();
 		msg.operacao = 6;
@@ -130,7 +120,6 @@ public class ControladorInterface {
 		cartasRodada = msg.cartasRodada;
 	}
 
-	// metodo a ser chamado quando o jogador votar
 	public void enviarVotoDaVez(String votoDaVez) {
 		jogador.setVotoDaVez(votoDaVez);
 		Mensagem msg = new Mensagem();
@@ -143,11 +132,9 @@ public class ControladorInterface {
 				this.facade.RestartGame();
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
-	// da autorizacao (true) para prosseguir o jogo depois que todos votarem
 	public Boolean todosVotaram() {
 		Mensagem msg = new Mensagem();
 		msg.operacao = 8;
@@ -158,16 +145,14 @@ public class ControladorInterface {
 			return false;
 	}
 
-	// inicia a proxima rodada
 	public void proximaRodada() {
+		//System.out.println("passou aqui");
 		Mensagem msg = new Mensagem();
 		msg.operacao = 9;
 		msg.jogador = this.jogador;
 		new Conexao(msg, ip);
 	}
 
-	// atribui a pontuacao dos jogadores apos cada rodada (deve ser usado antes do
-	// metodo proximaRodada() )
 	public void setarPontuacao() {
 		Mensagem msg = new Mensagem();
 		msg.operacao = 10;

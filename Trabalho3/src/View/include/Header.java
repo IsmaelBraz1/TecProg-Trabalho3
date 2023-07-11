@@ -18,7 +18,6 @@ public class Header extends StylePanel {
 				+ "<strong>Ismael</strong>\n"
 				+ "<strong>Pedro</strong>\n"
 				+ "<strong>Marcelo</strong>\n"
-				+ "<strong>Caio</strong>\n"
 				+ "</html>";
 		
 		JLabel title = new JLabel(headerText);
