@@ -39,8 +39,8 @@ public class ControladorGeral {
 	}
 
 	public void proximaRodada(Jogador jogador) {
-		//DAO dao = new DAO();
-		//dao.inserir(ControladorGeral.getInstance());
+		DAO dao = new DAO();
+		dao.inserir(ControladorGeral.getInstance());
 		qtdVotos = 0;
 		SorteioCartas.jaForamSorteados.clear();
 		cartasDaRodada.clear();
